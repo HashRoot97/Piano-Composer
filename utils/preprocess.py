@@ -28,7 +28,7 @@ print('Notes Generated')
 print('Generating Dataset ... ')
 
 pitch_names = sorted(set(item for item in notes))
-n_vocab = len(pitch_names)
+n_vocab = float(len(pitch_names))
 
 note_to_int = dict(((number, note) for note, number in enumerate(pitch_names)))
 sequence_length = 100
@@ -45,6 +45,7 @@ n_patterns = len(network_input)
 network_input = np.array(network_input)
 network_output = np.array(network_output)
 network_input = np.reshape(network_input, (n_patterns, sequence_length, 1))
+network_input = network_input / n_vocab
 network_output = keras.utils.to_categorical(network_output)
 print(network_input.shape)
 print(network_output.shape)
