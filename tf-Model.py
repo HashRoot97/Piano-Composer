@@ -8,6 +8,7 @@ network_output = np.load('./NumpyDataset/Output-Tensor.npy')
 print(network_input.shape, network_output.shape)
 
 time_steps=100
+n_classes = 358
 
 print('Creating graph')
 
@@ -15,7 +16,7 @@ x = tf.placeholder(dtype=tf.float32,
                        shape=(None, 100, 1))
     
 y_true = tf.placeholder(dtype=tf.float32, 
-                       shape=(None, 358))
+                       shape=(None, n_classes))
     
 y_true_cls = tf.argmax(y_true, axis=1)
     
@@ -39,7 +40,7 @@ output_dense1 = tf.layers.dense(outputs[-1],
                                     activation=None)
     
 logits = tf.layers.dense(output_dense1, 
-                         358, 
+                         n_classes, 
                          activation=None)
     
 y_pred = tf.nn.softmax(logits=logits)
@@ -47,7 +48,7 @@ y_pred = tf.nn.softmax(logits=logits)
 y_pred_cls = tf.argmax(y_pred, 
                        axis=1)
     
-cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(labels=y_true, 
+cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=y_true, 
                                                            logits=logits)
 loss = tf.reduce_mean(cross_entropy)
     
@@ -61,6 +62,7 @@ print('Built graph sucessfully')
 num_iterations = 1783
 batch_size = 32
 epochs = 10
+save_every = 20
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 saver = tf.train.Saver()
@@ -74,10 +76,12 @@ def optimize():
         feed_dict = {x: x_true_batch,
                      y_true: y_true_batch}
         sess.run(optimizer, feed_dict=feed_dict)
-        if i % 20 == 0:
-	        acc = sess.run(accuracy,feed_dict=feed_dict)
+        feed_dict_acc = {x: network_input[57000:57077],
+    					 y_true: network_output[57000:57077]}
+        if i % save_every == 0:
+	        acc = sess.run(accuracy,feed_dict=feed_dict_acc)
 	        print('Accuracy after %d iterations : %.7f' % (i+1, acc))
-	        saver.save(sess, './model-checkpoints/saved_model', global_step=20)
+	        saver.save(sess, './model-checkpoints/saved_model')
 	        print('Model saved')
         
 print('Starting Training')
