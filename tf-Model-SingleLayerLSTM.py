@@ -72,7 +72,7 @@ def optimize():
         	j = random.randint(0, 1783)
         	feed_dict_acc = {x: network_input[j*batch_size:(j*batch_size)+batch_size],
     					 	 y_true: network_output[j*batch_size:(j*batch_size)+batch_size]}
-	        [acc, y_p, y_t] = sess.run([accuracy, y_pred_cls, y_true_cls],feed_dict=feed_dict_acc)
+	        acc, y_p, y_t = sess.run([accuracy, y_pred_cls, y_true_cls],feed_dict=feed_dict_acc)
 	        print('Accuracy after %d iterations : %.7f' % (i+1, acc))
 	        print(y_p)
 	        print(y_t)
@@ -86,34 +86,3 @@ for j in range(epochs):
     optimize()
     print('%d Epochs completed' % (j+1))
 
-
-# logits = tf.layers.dense(output_dense1, 
-#                          n_classes, 
-#                          activation=None)
-    
-# y_pred = tf.nn.softmax(logits=logits)
-    
-# y_pred_cls = tf.argmax(y_pred, 
-#                        axis=1)
-    
-# cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=y_true, 
-#                                                            logits=logits)
-# loss = tf.reduce_mean(cross_entropy)
-    
-# optimizer = tf.train.RMSPropOptimizer(learning_rate=1e-4).minimize(loss)
-    
-# correct_prediction = tf.equal(y_pred_cls, y_true_cls)
-# accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-
-# print('Built graph sucessfully')
-
-# sess = tf.Session()
-# saver = tf.train.Saver()
-# saver.restore(sess, './model-checkpoints/saved_model')
-# print('Restored Model')
-
-# feed_dict_acc = {x: network_input[57000:57077],
-#     				 y_true: network_output[57000:57077]}
-# acc = sess.run(accuracy,feed_dict=feed_dict_acc)
-	
-# print(acc)
