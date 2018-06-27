@@ -45,11 +45,13 @@ n_patterns = len(network_input)
 network_input = np.array(network_input)
 network_output = np.array(network_output)
 network_input = np.reshape(network_input, (n_patterns, sequence_length, 1))
-network_input = network_input / n_vocab
+
 network_output = keras.utils.to_categorical(network_output)
 print(network_input.shape)
 print(network_output.shape)
-os.system('mkdir ./../NumpyDataset')
+
+if 'NumpyDataset' not in os.listdir('./../'):
+    os.system('mkdir ./../NumpyDataset')
 np.save('./../NumpyDataset/Input-Tensor.npy', network_input)
 np.save('./../NumpyDataset/Output-Tensor.npy', network_output)
 

@@ -78,11 +78,17 @@ def optimize():
         sess.run(optimizer, feed_dict=feed_dict)
         feed_dict_acc = {x: network_input[57000:57077],
     					 y_true: network_output[57000:57077]}
-        if i % save_every == 0:
-	        acc = sess.run(accuracy,feed_dict=feed_dict_acc)
-	        print('Accuracy after %d iterations : %.7f' % (i+1, acc))
-	        saver.save(sess, './model-checkpoints/saved_model')
-	        print('Model saved')
+        if i % save_every == 0 and i!=0:
+          j = random.randint(0, 1783)
+          feed_dict_acc = {x: network_input[j*batch_size:(j*batch_size)+batch_size],
+                 y_true: network_output[j*batch_size:(j*batch_size)+batch_size]}
+          acc, y_p, y_t = sess.run([accuracy, y_pred_cls, y_true_cls],feed_dict=feed_dict_acc)
+          print('Accuracy after %d iterations : %.7f' % (i+1, acc))
+          print(y_p)
+          print(y_t)
+
+          # saver.save(sess, './model-checkpoints/saved_model')
+          # print('Model saved')
         
 print('Starting Training')
 for j in range(epochs):

@@ -53,8 +53,8 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 # saver = tf.train.Saver()
-batch_size = 32
-num_iterations = 1783
+batch_size = 64
+num_iterations = 891
 epochs = 10
 save_every = 20
 
